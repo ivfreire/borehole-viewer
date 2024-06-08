@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public class Geology : MonoBehaviour {
+    public Borehole borehole;
     private float currentDepth = 0.0f;
 
     void Start() {
