@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -14,10 +15,11 @@ public class Geology : MonoBehaviour {
     }
 
     void InstantiateLayer(string name, float depth, Texture texture) {
-        // Large Outer Layer
+        // Large outer layers
+        GameObject outer = GameObject.Find("Outer");
         GameObject layerObject = GameObject.Find("Outer/Layer");
 
-        GameObject instance = Instantiate(layerObject);
+        GameObject instance = Instantiate(layerObject, outer.transform);
         instance.transform.localScale = new Vector3(1.0f, 1.0f, depth);
         instance.transform.localPosition = Vector3.down * this.currentDepth;
        
@@ -26,10 +28,14 @@ public class Geology : MonoBehaviour {
         renderer.material.mainTextureScale = new Vector2(1.0f, depth);
         renderer.material.mainTexture = texture;
 
-        // Cut Layer
+        // Cut layers
+        GameObject cut = GameObject.Find("Cut");
         layerObject = GameObject.Find("Cut/Layer");
 
-        instance = Instantiate(layerObject);
+        // Final layer first
+
+
+        instance = Instantiate(layerObject, cut.transform);
         instance.transform.localScale = new Vector3(1.0f, 1.0f, depth);
         instance.transform.localPosition = Vector3.down * this.currentDepth;
 
@@ -41,6 +47,8 @@ public class Geology : MonoBehaviour {
     }
 
     void InstantiateLayers() {
+
+        // TODO: Implement layer loading from a file.
         this.InstantiateLayer("Sandy Clay Fill", 4.0f, (Texture)AssetDatabase.LoadAssetAtPath("Assets/Textures/Geology/SandyClay.png", typeof(Texture)));
         this.InstantiateLayer("Silty Clay Organic Fill", 1.0f, (Texture)AssetDatabase.LoadAssetAtPath("Assets/Textures/Geology/SiltyClayOrganic.png", typeof(Texture)));
         this.InstantiateLayer("Silty Clay Fill", 5.0f, (Texture)AssetDatabase.LoadAssetAtPath("Assets/Textures/Geology/SiltyClay.png", typeof(Texture)));
@@ -53,6 +61,11 @@ public class Geology : MonoBehaviour {
         // Remove original layer
         Destroy(GameObject.Find("Outer/Layer"));
         Destroy(GameObject.Find("Cut/Layer"));
+    }
+
+    void Toggle() {
+        GameObject outer = GameObject.Find("Outer");
+        outer.SetActive(!outer.activeSelf);
     }
 
     void Update() {
