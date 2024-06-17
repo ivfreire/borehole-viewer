@@ -8,8 +8,8 @@ public class Surface : MonoBehaviour {
     }
 
     void Toggle() {
-        Renderer renderer = this.GetComponent<Renderer>();
-        renderer.enabled = !renderer.enabled;
+        Debug.Log("Toggling surface");
+        this.gameObject.SetActive(!this.gameObject.activeSelf);
     }
 
     void Update() {
